@@ -1,6 +1,6 @@
 library(shiny)
-
 ui <- fluidPage(
+  shinyjs::useShinyjs(),
   titlePanel("Loss of heterozygosity - comparison"),
   
   # Sidebar layout with input and output definitions ----
@@ -23,10 +23,15 @@ ui <- fluidPage(
         choices = c(H3M2 = "H3M2",
                     Plink = "PLINK"),
         selected = "H3M2"
+      ),
+      
+      radioButtons(
+        "options",
+        "Select H3M2 Options",
+        choices = c(Option1 = "Option1",
+                    Option2 = "Option2"),
+        selected = "Option2"
       )
-      
-      
-      
     ),
     # Main panel for displaying outputs ----
     mainPanel(tableOutput("results"))
@@ -40,6 +45,10 @@ server <- function(input, output) {
     rownames(matrix) <- c('mock', 'table') #TODO: remove mock table
     matrix
   })
+  
+  observe({
+    shinyjs::toggleState("options", input$alg == "H3M2") #Disable options when alg != H3M2
+    })
 }
 
 # Create Shiny app ----
