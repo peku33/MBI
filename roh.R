@@ -7,3 +7,9 @@
 #		task$chromosomes$region <- list() / NULL # Ustawienie zakresu lub NULL dla braku filtrowania
 #			task$chromosomes$region$begin <- int # Początek zakresu
 #			task$chromosomes$region$end <- int # Koniez zakresu
+
+# Obiekt roh
+# roh <- data.frame()
+# kolumny:
+#	begin - index początku homozygotycznośći
+#	end - index końca homozygotyczności
