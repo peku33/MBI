@@ -7,6 +7,6 @@ test.suite <- defineTestSuite(
 	".",
 )
 
-test.result <- runTestSuite(test.suite, verbose = TRUE)
+test.result <- runTestSuite(test.suite)
 
 printTextProtocol(test.result)
