@@ -101,59 +101,56 @@ bcftools.roh.buildparams <- function(
 }
 
 # Uruchamia bcftools roh o podanych parametrach
-# Zwraca zawartość wyjściowego pliku, tymczasowe usuwa
 bcftools.roh.run <- function(
 	params
 ) {
+	# Wyjście do pliku tymczasowgo
+	file.name = tempfile()
 
-	# W wyniku spodziewamy się powstania plików
-	# .log - w zasadzie to co na wyjściu do konsoli
-	# .hom - lista regionów z brakami heterozygotyczności dla wszystkich osobników
-	# .hom.indiv - podsumowanie po jednym wersje dla osobnika
-	# .hom.summary - pełna lista wszystkich regionów z zaznaczonymi elementami homo i hetero
-	# .nosex - w zasadzie FID + IID
+	params <- paste(params, "--output")
+	params <- paste(params, file.name)
 
-	# Losowa nazwa pliku
-	file.name.base = tempfile()
+	# Chcemy tylko informacje o regionach
+	params <- paste(params, "-O")
+	params <- paste(params, "r")
 
-	# Ścieżki spodziewanych wyjść
-	file.name.log <- paste(file.name.base, ".log", sep = "")
-	file.name.hom <- paste(file.name.base, ".hom", sep = "")
-	file.name.hom.indiv <- paste(file.name.base, ".hom.indiv", sep = "")
-	file.name.hom.summary <- paste(file.name.base, ".hom.summary", sep = "")
-	file.name.nosex <- paste(file.name.base, ".nosex", sep = "")
-
-	# Dodajemy ścieżkę bazową do polecenia
-	params <- paste(params, "--out")
-	params <- paste(params, file.name.base)
-
-	# Uruchomienie bcftools, zgubienie wyjścia
-	system2(
+	# Uruchomienie bcftools
+	exit.code <- system2(
 		bcftools.roh.executable, params,
 		# "", "", # stdout + stderr do konsoli
 		NULL, NULL, # stdout + stderr do kosza
 	)
 
-	# Sprawdzamy czy powstały wyjściowe pliki
-	if(!all(file.exists(file.name.log, file.name.hom, file.name.hom.indiv, file.name.hom.summary, file.name.nosex))) {
-		stop("!all(file.exists(file.name.log, file.name.hom, file.name.hom.indiv, file.name.hom.summary, file.name.nosex))")
+	# Sprawdzamy kod zakończenia
+	if(exit.code != 0) {
+		stop("exit.code")
 	}
 
-	# Procesujemy wyjście programu
-	bcftools.roh.table <- read.table(file.name.hom, TRUE)
-	regions <- bcftools.roh.table.to.regions(bcftools.roh.table)
-
-	# Usuwamy wyjściowe pliki
-	if(!all(file.remove(file.name.log, file.name.hom, file.name.hom.indiv, file.name.hom.summary, file.name.nosex))) {
-		stop("!all(file.remove(file.name.log, file.name.hom, file.name.hom.indiv, file.name.hom.summary, file.name.nosex))")
+	# Czy plik istnieje?
+	if(!file.exists(file.name)) {
+		stop("!file.exists(file.name)")
 	}
 
-	return(regions)
+	# Parsujemy wyjście
+	bcftools.roh.table <- read.table(file.name)
+	result <- bcftools.roh.table.to.regions(bcftools.roh.table)
+
+	# Usuwamy plik tymczasowy
+	if(!file.remove(file.name)) {
+		stop("!file.remove(file.name)")
+	}
+
+	# Zwracamy wynik
+	return(result)
 }
 
 # Zamienia tabelę roh odczytaną przez bcftools na format roh (roh.R)
 bcftools.roh.table.to.regions <- function(table) {
-	t <- table[c("POS1", "POS2")]
+
+	# Nagłówek: 
+	# RG    [2]Sample       [3]Chromosome   [4]Start        [5]End  [6]Length (bp)  [7]Number of markers    [8]Quality (average fwd-bwd phred score)
+
+	t <- table[c("V4", "V5")]
 	colnames(t) <- c("begin", "end")
 	return(t)
 }

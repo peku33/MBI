@@ -143,11 +143,15 @@ plink.roh.run <- function(
 	params <- paste(params, file.name.base)
 
 	# Uruchomienie plink, zgubienie wyjścia
-	system2(
+	exit.code <- system2(
 		plink.roh.executable, params,
 		# "", "", # stdout + stderr do konsoli
 		NULL, NULL, # stdout + stderr do kosza
 	)
+
+	if(exit.code != 0) {
+		stop("exit.code")
+	}
 
 	# Sprawdzamy czy powstały wyjściowe pliki
 	if(!all(file.exists(file.name.log, file.name.hom, file.name.hom.indiv, file.name.hom.summary, file.name.nosex))) {
