@@ -13,3 +13,39 @@
 # kolumny:
 #	begin - index początku homozygotycznośći
 #	end - index końca homozygotyczności
+
+
+
+task.chromosomes.to.string <- function(task.chromosomes) {
+
+	# Dla wartości NULL zwracamy NULL
+	if(is.null(task.chromosomes)) {
+		return(NULL)
+	}
+
+	# Albo chromosom albo region albo jedno i drugie
+	if(is.null(task.chromosomes$chromosome) && is.null(task.chromosomes$region)) {
+		stop("is.null(task.chromosomes$chromosome) && is.null(task.chromosomes$region)")
+	}
+
+	output <- ""
+
+	# task.chromosomes$chromosome
+	if(!is.null(task.chromosomes$chromosome)) {
+		output <- paste(output, task.chromosomes$chromosome, sep = "")
+	}
+
+	# separator
+	if(!is.null(task.chromosomes$chromosome) && !is.null(task.chromosomes$region)) {
+		output <- paste(output, ":", sep = "")
+	}
+
+	# task.chromosomes$region
+	if(!is.null(task.chromosomes$region)) {
+		output <- paste(output, task.chromosomes$region$begin, sep = "")
+		output <- paste(output, "-", sep = "")
+		output <- paste(output, task.chromosomes$region$end, sep = "")
+	}
+
+	return(output)
+}

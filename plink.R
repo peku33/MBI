@@ -1,3 +1,5 @@
+source('roh.R')
+
 plink.roh.executable <- "./plink_linux_x86_64/plink"
 
 # Na podstawie https://www.cog-genomics.org/plink/1.9/ibd
@@ -40,31 +42,10 @@ plink.roh.buildparams <- function(
 	}
 
 	# task$chromosomes
-	if(!is.null(task$chromosomes)) {
-
-		# Albo chromosom albo region albo jedno i drugie, ale samo nie ma sensu
-		if(is.null(task$chromosomes$chromosome) && is.null(task$chromosomes$region)) {
-			stop("is.null(task$chromosomes$chromosome) && is.null(task$chromosomes$region)")
-		}
-
-		params <- paste(params, "--chr ")
-
-		# task$chromosomes$chromosome
-		if(!is.null(task$chromosomes$chromosome)) {
-			params <- paste(params, task$chromosomes$chromosome, sep = "")
-		}
-
-		# separator
-		if(!is.null(task$chromosomes$chromosome) && !is.null(task$chromosomes$region)) {
-			params <- paste(params, ":", sep = "")
-		}
-
-		# task$chromosomes$region
-		if(!is.null(task$chromosomes$region)) {
-			params <- paste(params, task$chromosomes$region$begin, sep = "")
-			params <- paste(params, "-", sep = "")
-			params <- paste(params, task$chromosomes$region$end, sep = "")
-		}
+	task.chromosomes.string <- task.chromosomes.to.string(task$chromosomes)
+	if(!is.null(task.chromosomes.string)) {
+		params <- paste(params, "--chr")
+		params <- paste(params, task.chromosomes.string)
 	}
 
 	# 
