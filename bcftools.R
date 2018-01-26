@@ -110,9 +110,9 @@ bcftools.roh.run <- function(
 	params <- paste(params, "--output")
 	params <- paste(params, file.name)
 
-	# Chcemy tylko informacje o regionach
+	# Chcemy tylko informacje o samplach
 	params <- paste(params, "-O")
-	params <- paste(params, "r")
+	params <- paste(params, "s")
 
 	# Uruchomienie bcftools
 	exit.code <- system2(
@@ -148,9 +148,11 @@ bcftools.roh.run <- function(
 bcftools.roh.table.to.regions <- function(table) {
 
 	# Nagłówek: 
-	# RG    [2]Sample       [3]Chromosome   [4]Start        [5]End  [6]Length (bp)  [7]Number of markers    [8]Quality (average fwd-bwd phred score)
+	# V1	V2				V3				V4				V5						V6
+	# ST    [2]Sample       [3]Chromosome   [4]Position     [5]State (0:HW, 1:AZ)   [6]Quality (fwd-bwd phred score)
 
-	t <- table[c("V4", "V5")]
-	colnames(t) <- c("begin", "end")
+	t <- table[c("V4", "V5", "V6")]
+	colnames(t) <- c("position", "homozygosity", "score")
+	t$homozygosity = as.logical(t$homozygosity)
 	return(t)
 }

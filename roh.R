@@ -11,8 +11,9 @@
 # Obiekt roh
 # roh <- data.frame()
 # kolumny:
-#	begin - index początku homozygotycznośći
-#	end - index końca homozygotyczności
+#	position - (int) index próbki
+#	homozygosity - (logical <bool>) czy próbka znajduje się w regionie homozygotyczności
+#	score - (optional, float 0.0 - 100.0) ocena pewności
 
 
 

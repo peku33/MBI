@@ -159,7 +159,7 @@ plink.roh.run <- function(
 	}
 
 	# Procesujemy wyjście programu
-	plink.roh.table <- read.table(file.name.hom, TRUE)
+	plink.roh.table <- read.table(file.name.hom.summary, TRUE)
 	regions <- plink.roh.table.to.regions(plink.roh.table)
 
 	# Usuwamy wyjściowe pliki
@@ -172,7 +172,7 @@ plink.roh.run <- function(
 
 # Zamienia tabelę roh odczytaną przez plink na format roh (roh.R)
 plink.roh.table.to.regions <- function(table) {
-	t <- table[c("POS1", "POS2")]
-	colnames(t) <- c("begin", "end")
+	t <- data.frame(table$BP, as.logical(table$AFF) | as.logical(table$UNAFF))
+	colnames(t) <- c("position", "homozygosity")
 	return(t)
 }
