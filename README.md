@@ -7,6 +7,10 @@ Instalacja:
 ----------
 Do działania, konieczna jest instalacja (wystarczy zbudowanie):
 
+- `samtools`:
+  - `https://github.com/samtools/tabix`
+  - `make` zgodnie z instrukcją
+  - ustawienie ścieżki do `bgzip` i `tabix` w `samtools.R`
 - `BCFTools`:
   - `git clone https://github.com/samtools/BCFtools`
   - `make` zgodnie z instrukcją

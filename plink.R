@@ -6,7 +6,7 @@ plink.roh.executable <- "./plink_linux_x86_64/plink"
 
 # Buduje wiersz parametrów wywołania programu plink
 #
-# task - task (roh.R)
+# vcf.file.name (string) Ścieżka do pliku .vcf / .vcf.gz
 #
 # Opcjonalnie:
 # snp (int) - min SNP count
@@ -20,33 +20,16 @@ plink.roh.executable <- "./plink_linux_x86_64/plink"
 # window.threshold (int) - min scanning window hit rate
 # match (int) - min overlap rate
 plink.roh.buildparams <- function(
-		task,
+		vcf.file.name,
 		snp = NULL, kb = NULL, density = NULL, gap = NULL, het = NULL,
 		window.snp = NULL, window.het = NULL, window.missing = NULL, window.threshold = NULL,
 		match = NULL
 ) {
 	params <- ""
 
-	if(is.null(task))
-		stop("is.null(task)")
-
 	# task$vcf_file_name
 	params <- paste(params, "--vcf", sep = "") # Bez spacji
-	params <- paste(params, task$vcf_file_name)
-
-	# task$sample
-	# TODO: Dodać filtrowanie po task$sample.
-	# W plinku możliwe FID albo IID?
-	if(!is.null(task$sample)) {
-		stop("No support for sample filtering in plink. Sorry. Use filtered file and set task$sample to NULL")
-	}
-
-	# task$chromosomes
-	task.chromosomes.string <- task.chromosomes.to.string(task$chromosomes)
-	if(!is.null(task.chromosomes.string)) {
-		params <- paste(params, "--chr")
-		params <- paste(params, task.chromosomes.string)
-	}
+	params <- paste(params, vcf.file.name)
 
 	# 
 	params <- paste(params, "--homozyg")
