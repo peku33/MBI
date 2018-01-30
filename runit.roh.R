@@ -30,19 +30,6 @@ test.task.chromosomes.to.string.3 <- function() {
 # Jeśli podamy sam zakres - spodziewamy się go jako liczby na wyjściu
 test.task.chromosomes.to.string.4 <- function() {
 	task.chromosomes <- list()
-	task.chromosomes$region <- list()
-	task.chromosomes$region$begin <- 123
-	task.chromosomes$region$end <- 456
-
-	checkEquals(
-		task.chromosomes.to.string(task.chromosomes),
-		"123-456"
-	)
-}
-
-# Jeśli podamy jedno i drugie - otrzymamy połączone
-test.task.chromosomes.to.string.5 <- function() {
-	task.chromosomes <- list()
 	task.chromosomes$chromosome <- 789
 	task.chromosomes$region <- list()
 	task.chromosomes$region$begin <- 123
@@ -51,5 +38,19 @@ test.task.chromosomes.to.string.5 <- function() {
 	checkEquals(
 		task.chromosomes.to.string(task.chromosomes),
 		"789:123-456"
+	)
+}
+
+# Jeśli podamy sam zakres - spodziewamy się go jako liczby na wyjściu
+test.task.chromosomes.to.string.4 <- function() {
+	task.chromosomes <- list()
+	task.chromosomes$chromosome <- "xy"
+	task.chromosomes$region <- list()
+	task.chromosomes$region$begin <- 1e6
+	task.chromosomes$region$end <- 1e10
+
+	checkEquals(
+		task.chromosomes.to.string(task.chromosomes),
+		"xy:1000000-10000000000"
 	)
 }
