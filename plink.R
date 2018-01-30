@@ -1,6 +1,6 @@
 source('roh.R')
 
-plink.roh.executable <- "./plink_linux_x86_64/plink"
+plink.roh.executable <- "/Users/Pro/Downloads/plink_mac/plink"
 
 # Na podstawie https://www.cog-genomics.org/plink/1.9/ibd
 

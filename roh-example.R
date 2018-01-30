@@ -8,9 +8,9 @@ source('subsetter.R')
 # Zawartość usage-example można pobrać z http://samtools.github.io/bcftools/howtos/roh-calling.html
 
 task <- list()
-#task$vcf_file_name <- "./ALL.chr1.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz"
-task$vcf_file_name <- "./usage-example/test.vcf.gz"
-# task$sample <- 'HG00096'
+task$vcf_file_name <- "/Users/Pro/Downloads/ALL.chr1.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz"
+#task$vcf_file_name <- "./usage-example/test.vcf.gz"
+ task$sample <- 'HG00096'
 task$chromosomes <- list()
 task$chromosomes$chromosome = 1
 task$chromosomes$region <- list()

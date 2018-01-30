@@ -1,4 +1,12 @@
 library(shiny)
+
+source('roh.R')
+source('bcftools.R')
+source('plink.R')
+source('samtools.R')
+source('subsetter.R')
+
+
 ui <- fluidPage(
   shinyjs::useShinyjs(),
   titlePanel("Loss of heterozygosity - comparison"),
@@ -20,35 +28,82 @@ ui <- fluidPage(
       radioButtons(
         "alg",
         "Select algorithm",
-        choices = c(H3M2 = "H3M2",
+        choices = c(BCFTools = "BCFTools",
                     Plink = "PLINK"),
-        selected = "H3M2"
+        selected = "BCFTools"
       ),
+      textInput("sample", "Sample", ""),
+      textInput("chromosome", "Chromosome number", ""),
+      textInput("begin", "Begin", ""),
+      textInput("end", "End", ""),
+      actionButton('run','Run algorithm')
       
-      radioButtons(
-        "options",
-        "Select H3M2 Options",
-        choices = c(Option1 = "Option1",
-                    Option2 = "Option2"),
-        selected = "Option2"
-      )
     ),
     # Main panel for displaying outputs ----
-    mainPanel(tableOutput("results"))
+    mainPanel(plotOutput("results"))
   )
 )
 
+getObject <- function(input) {
+  task <- list()
+  task$chromosome <-input$chromosome
+  task$sample <- input$sample
+  task$region <- list()
+  task$region$begin <-input$begin
+  task$region$end <- input$end
+  task
+}
+
+
+runBCFToolsROH <- function(input, fileName) {
+  task <- getObject(input) 
+  task$vcf_file_name <- fileName
+  print(task)
+  print(fileName)
+  
+  print("== subsetter.prepare ==")
+  subsetter.prepare.result <- subsetter.prepare(task)
+  if (input$alg == "BCFTools") {
+    print("== BCFTools ROH ==")
+    bcftools.roh.params <- bcftools.roh.buildparams(subsetter.prepare.result)
+    print(bcftools.roh.params)
+    bcftools.roh.output <- bcftools.roh.run(bcftools.roh.params)
+    print(bcftools.roh.output)
+  } else {
+    plink.roh.params <- plink.roh.buildparams(subsetter.prepare.result)
+    print(plink.roh.params)
+    plink.roh.output <- plink.roh.run(plink.roh.params)
+    print(plink.roh.output)
+  }
+
+}
+
 # Define server logic
 server <- function(input, output) {
-  output$results <- renderTable({
-    matrix <- matrix(c("value1", "value2"), nrow = 2)
-    rownames(matrix) <- c('mock', 'table') #TODO: remove mock table
-    matrix
+  options(shiny.maxRequestSize=2048*1024^2)
+  chromosomes <- reactiveValues()
+  uploadedFilePath <- NULL;
+  
+  output$value <- renderText({ input$sample })
+  
+  output$results <- renderPlot({
+    input$newplot
+    cars2 <- cars + rnorm(nrow(cars)) # mock data
+    plot(cars2) # mock data
+  })
+
+  
+  output$choosenChromosomes<-renderPrint({
+    chromosomes$dList
   })
   
   observe({
-    shinyjs::toggleState("options", input$alg == "H3M2") #Disable options when alg != H3M2
-    })
+    #shinyjs::hide("options", input$alg == "BCFTools") #hide options when alg != BCFTools
+    if(input$run > 0) {
+      runBCFToolsROH(input, input$file1$datapath)
+    }
+    
+  })
 }
 
 # Create Shiny app ----

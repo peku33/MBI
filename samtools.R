@@ -1,5 +1,5 @@
-samtools.bgzip.executable = "./tabix/bgzip"
-samtools.tabix.executable = "./tabix/tabix"
+samtools.bgzip.executable = "/Users/Pro/tabix/bgzip"
+samtools.tabix.executable = "/Users/Pro/tabix/tabix"
 
 samtools.bgzip.run <- function(file.name) {
 
@@ -9,8 +9,8 @@ samtools.bgzip.run <- function(file.name) {
 	# Uruchomienie samtools.bgzip.executable
 	exit.code <- system2(
 		samtools.bgzip.executable, file.name,
-		# "", "", # stdout + stderr do konsoli
-		NULL, NULL, # stdout + stderr do kosza
+	  "", "" # stdout + stderr do konsoli
+		#NULL, NULL, # stdout + stderr do kosza
 	)
 
 	# Sprawdzamy kod zakończenia
@@ -36,23 +36,24 @@ samtools.tabix.buildparams <- function(file.name) {
 
 	params <- ""
 
+	# Z nagłówkiem
+	params <- paste(params, "-h")
+	
 	# Typ wejścia
 	params <- paste(params, "-p", sep = "")
 	params <- paste(params, "vcf")
 
 	# Nazwa pliku
 	params <- paste(params, file.name)
-
-	# Z nagłówkiem
-	params <- paste(params, "-h")
-
+	
 }
 samtools.tabix.run <- function(params) {
+  print(params)
 	# Uruchomienie samtools.tabix.executable
 	exit.code <- system2(
 		samtools.tabix.executable, params,
-		# "", "", # stdout + stderr do konsoli
-		NULL, NULL, # stdout + stderr do kosza
+		"", "" # stdout + stderr do konsoli
+		#NULL, NULL, # stdout + stderr do kosza
 	)
 
 	# Sprawdzamy kod zakończenia
