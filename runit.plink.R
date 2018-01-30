@@ -7,66 +7,10 @@ test.plink.roh.buildparams.empty <- function() {
 }
 test.plink.roh.buildparams.1 <- function() {
 
-	task <- list()
-	task$vcf_file_name <- "test1.test2.vcf.gz"
-	task$chromosomes <- list()
-	task$chromosomes$chromosome <- 1
-
-	params <- plink.roh.buildparams(task)
-
-	checkEquals(
-		params,
-		"--vcf test1.test2.vcf.gz --chr 1 --homozyg"
-	)
-}
-test.plink.roh.buildparams.2 <- function() {
-
-	task <- list()
-	task$vcf_file_name <- "test1.test2.vcf.gz"
-	task$chromosomes <- list()
-	task$chromosomes$chromosome <- 1
-	task$chromosomes$region <- list()
-	task$chromosomes$region$begin <- 234
-	task$chromosomes$region$end <- 4567
-
-	params <- plink.roh.buildparams(task)
-
-	checkEquals(
-		params,
-		"--vcf test1.test2.vcf.gz --chr 1:234-4567 --homozyg"
-	)
-}
-test.plink.roh.buildparams.3 <- function() {
-
-	task <- list()
-	task$vcf_file_name <- "test1.test2.vcf.gz"
-	task$chromosomes <- list()
-	task$chromosomes$region <- list()
-	task$chromosomes$region$begin <- 1234
-	task$chromosomes$region$end <- 45678
-
-	params <- plink.roh.buildparams(task)
-
-	checkEquals(
-		params,
-		"--vcf test1.test2.vcf.gz --chr 1234-45678 --homozyg"
-	)
-}
-test.plink.roh.buildparams.4 <- function() {
-
-	task <- list()
-	task$vcf_file_name <- "test1.test2.vcf.gz"
-	task$sample <- "HG00096"
-
-	checkException(plink.roh.buildparams(task))
-}
-test.plink.roh.buildparams.5 <- function() {
-
-	task <- list()
-	task$vcf_file_name <- "test1.test2.vcf.gz"
+	vcf_file_name <- "test1.test2.vcf.gz"
 
 	params <- plink.roh.buildparams(
-		task,
+		vcf_file_name,
 		1, 2, 3, 4, 5,
 		6, 7, 8, 9,
 		10

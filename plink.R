@@ -27,7 +27,10 @@ plink.roh.buildparams <- function(
 ) {
 	params <- ""
 
-	# task$vcf_file_name
+	if(is.null(vcf.file.name))
+		stop('is.null(vcf.file.name)')
+
+	# vcf.file.name
 	params <- paste(params, "--vcf", sep = "") # Bez spacji
 	params <- paste(params, vcf.file.name)
 
