@@ -9,6 +9,7 @@ Do działania, konieczna jest instalacja (wystarczy zbudowanie):
 
 - `samtools`:
   - `https://github.com/samtools/tabix`
+  - `https://github.com/samtools/htslib.git`
   - `make` zgodnie z instrukcją
   - ustawienie ścieżki do `bgzip` i `tabix` w `samtools.R`
 - `BCFTools`:
