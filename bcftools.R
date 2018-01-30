@@ -29,6 +29,9 @@ bcftools.roh.buildparams <- function(
 
 	params <- "roh"
 
+	if(is.null(vcf.file.name))
+		stop('is.null(vcf.file.name)')
+
 	# vcf.file.name
 	params <- paste(params, vcf.file.name)
 
