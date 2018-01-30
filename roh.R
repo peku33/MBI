@@ -2,11 +2,11 @@
 # task <- list()
 #	task$vcf_file_name = string # Ścieżka do pliku .vcf lub .vcf.gz
 #	task$sample <- string / NULL # Próbka dla której zostaną odfiltrowane wyniki z .vcf lub NULL aby pominąć filtrowanie
-#	task$chromosomes <- list() / NULL # Ustawienia filtra chromosomów. Kolekcja opisana niżej albo NULL dla braku filtrowania
-#		task$chromosomes$chromosome <- int / NULL # Numer chromosomu lub NULL dla braku filtrowania
-#		task$chromosomes$region <- list() / NULL # Ustawienie zakresu lub NULL dla braku filtrowania
-#			task$chromosomes$region$begin <- int # Początek zakresu
-#			task$chromosomes$region$end <- int # Koniez zakresu
+#	task.chromosomes <- list() / NULL # Ustawienia filtra chromosomów. Kolekcja opisana niżej albo NULL dla braku filtrowania
+#		task.chromosomes$chromosome <- int / NULL # Numer chromosomu lub NULL dla braku filtrowania
+#		task.chromosomes$region <- list() / NULL # Ustawienie zakresu lub NULL dla braku filtrowania
+#			task.chromosomes$region$begin <- int # Początek zakresu
+#			task.chromosomes$region$end <- int # Koniez zakresu
 
 # Obiekt roh
 # roh <- data.frame()
@@ -38,8 +38,8 @@ task.chromosomes.to.string <- function(task.chromosomes) {
 	if(!is.null(task.chromosomes$region)) {
 
 		# Początek i koniec nie mogą być nullami
-		if(is.null(task$chromosomes$region$begin) || is.null(task$chromosomes$region$end))
-			stop("is.null(task$chromosomes$region$begin) || is.null(task$chromosomes$region$end)")
+		if(is.null(task.chromosomes$region$begin) || is.null(task.chromosomes$region$end))
+			stop("is.null(task.chromosomes$region$begin) || is.null(task.chromosomes$region$end)")
 
 		output <- paste(output, ":", sep = "")
 		output <- paste(output, format(task.chromosomes$region$begin, scientific=F), sep = "")
