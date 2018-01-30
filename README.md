@@ -7,9 +7,11 @@ Instalacja:
 ----------
 Do działania, konieczna jest instalacja (wystarczy zbudowanie):
 
+- `htslib`:
+  - `https://github.com/samtools/htslib.git`
+  - `make` zgodnie z instrukcją
 - `samtools`:
   - `https://github.com/samtools/tabix`
-  - `https://github.com/samtools/htslib.git`
   - `make` zgodnie z instrukcją
   - ustawienie ścieżki do `bgzip` i `tabix` w `samtools.R`
 - `BCFTools`:
@@ -23,6 +25,7 @@ Do działania, konieczna jest instalacja (wystarczy zbudowanie):
 Wymagane biblioteki `R`:
 
  - RUnit ( `install.packages('RUnit')`)
+ - vcfR ( `install.packages('vcfR')`)
 
 Struktury danych:
 -----------------
