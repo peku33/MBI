@@ -4,6 +4,7 @@ source('bcftools.R')
 source('plink.R')
 source('samtools.R')
 source('subsetter.R')
+source('vcfr.R')
 
 # Zawartość usage-example można pobrać z http://samtools.github.io/bcftools/howtos/roh-calling.html
 
@@ -33,6 +34,10 @@ plink.roh.params <- plink.roh.buildparams(subsetter.prepare.result)
 print(plink.roh.params)
 plink.roh.output <- plink.roh.run(plink.roh.params)
 # print(plink.roh.output)
+
+print("== vcfR BAF ==")
+vcfr.baf.output <- vcfr.baf.from.file(subsetter.prepare.result)
+# print(vcfr.baf.output)
 
 print("== subsetter.cleanup ==")
 subsetter.cleanup(subsetter.prepare.result)
