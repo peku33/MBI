@@ -36,16 +36,18 @@ samtools.tabix.buildparams <- function(file.name) {
 
 	params <- ""
 
+	# Bug: przeniesienie tego na koniec powoduje problem na osx
+	# Z nagłówkiem
+	params <- paste(params, "-h", sep = "")
+
 	# Typ wejścia
-	params <- paste(params, "-p", sep = "")
+	params <- paste(params, "-p")
 	params <- paste(params, "vcf")
 
 	# Nazwa pliku
 	params <- paste(params, file.name)
 
-	# Z nagłówkiem
-	params <- paste(params, "-h")
-
+	return(params)
 }
 samtools.tabix.run <- function(params) {
 	# Uruchomienie samtools.tabix.executable
