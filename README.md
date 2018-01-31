@@ -97,3 +97,7 @@ Opisane szczegółowo w pliku `roh.R`
 Przykład uruchomienia algorytmów:
 ---------------------------------
 `roh-example.R`
+
+Testy:
+------
+Testowalne metody zostały pokryte testami jednostkowymi. Aby uruchomić kompletny zestaw testów należy rozpocząć działanie programu `tests-runit.R`
