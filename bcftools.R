@@ -142,7 +142,9 @@ bcftools.roh.table.to.regions <- function(table) {
 	return(t)
 }
 
-
+# Buduje zestaw parametrów do uruchomienia BCFTools view
+# 	task - zadanie, zdefiniowane w pliku roh.R
+# 	output.file.name - wyjściowa nazwa pliku, do którego zostaną zapisane dane.
 bcftools.view.buildparams <- function(task, output.file.name) {
 
 	params <- "view"
@@ -173,6 +175,7 @@ bcftools.view.buildparams <- function(task, output.file.name) {
 
 	return(params)
 }
+# Uruchamia podprogram view z parametrami zbudowanymi przez bcftools.view.buildparams
 bcftools.view.run <- function(params) {
 	# Uruchomienie bcftools
 	exit.code <- system2(

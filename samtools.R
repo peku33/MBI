@@ -34,6 +34,9 @@ samtools.bgzip.run <- function(file.name) {
 
 samtools.tabix.buildparams <- function(file.name) {
 
+	if(is.null(file.name))
+		stop('is.null(file.name)')
+
 	params <- ""
 
 	# Bug: przeniesienie tego na koniec powoduje problem na osx
