@@ -1,3 +1,6 @@
+if (! "vcfR" %in% row.names(installed.packages()))
+  install.packages("vcfR")
+
 library('vcfR')
 library('stringr')
 
