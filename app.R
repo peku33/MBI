@@ -5,7 +5,7 @@ source('bcftools.R')
 source('plink.R')
 source('samtools.R')
 source('subsetter.R')
-#source('vcfr.R')
+source('vcfr.R')
 
 
 ui <- fluidPage(
@@ -27,13 +27,6 @@ ui <- fluidPage(
       textInput("file", "File path", ""),
       tags$hr(),
       
-      radioButtons(
-        "alg",
-        "Select algorithm",
-        choices = c(BCFTools = "BCFTools",
-                    Plink = "PLINK"),
-        selected = "BCFTools"
-      ),
       textInput("sample", "Sample", ""),
       textInput("chromosome", "Chromosome number", ""),
       textInput("begin", "Begin", ""),
@@ -42,7 +35,7 @@ ui <- fluidPage(
       
     ),
     # Main panel for displaying outputs ----
-    mainPanel(plotOutput("results"))
+    mainPanel(plotOutput("results"),plotOutput("results1"),plotOutput("results2"))
   )
 )
 
@@ -76,21 +69,27 @@ runBCFToolsROH <- function(output, input, fileName) {
     plink.roh.params <- plink.roh.buildparams(subsetter.prepare.result)
     print(plink.roh.params)
     plink.roh.output <- plink.roh.run(plink.roh.params)
-    output$results <- renderPlot({
+    
+    
+    print("== vcfR BAF ==")
+    vcfr.baf.output <- vcfr.baf.from.file(subsetter.prepare.result)
+    
+    output$results2 <- renderPlot({
     #  input$newplot
      # plot(plink.roh.output) # mock data
-      
-      plot(bcftools.roh.output$homozygosity,col="red")
-      lines(plink.roh.output,col="green")
+      plot(bcftools.roh.output$homozygosity,col="red",cex=0.25)
       
     })
     
-  #  print("== vcfR BAF ==")
-  #  vcfr.baf.output <- vcfr.baf.from.file(subsetter.prepare.result)
-  #  output$results1 <- renderPlot({
-  #    input$newplot
-  #    plot(vcfr.baf.output) # mock data
-  #  })
+    output$results1 <- renderPlot({
+      #input$newplot
+      plot(plink.roh.output$homozygosity,col="green",cex=0.25) # mock data
+    })
+    
+    output$results <- renderPlot({
+    #  input$newplot
+      plot(vcfr.baf.output,col="blue",cex=0.25)
+    })
 }
 
 # Define server logic

@@ -79,7 +79,7 @@ vcfr.baf.from.struct <- function(vcfr.baf.struct) {
 vcfr.baf.from.file <- function(vcfr.baf.file) {
 	return(
 		vcfr.baf.from.struct(
-			read.vcfR(vcfr.baf.file)
+			read.vcfR(vcfr.baf.file, verbose = FALSE)
 		)
 	)
 }
