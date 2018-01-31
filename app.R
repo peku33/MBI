@@ -36,7 +36,8 @@ ui <- fluidPage(
       textInput("plValue", "PL value", ""),
       textInput("recRate", "Recombination rate", ""),
       tags$hr(),
-      actionButton('run','Run algorithm')
+      actionButton('run','Run algorithm'),
+      verbatimTextOutput("progress")
       
     ),
     # Main panel for displaying outputs ----
@@ -134,7 +135,15 @@ server <- function(input, output) {
   observe({
     #shinyjs::hide("options", input$alg == "BCFTools") #hide options when alg != BCFTools
     if(input$run > 0) {
+      output$progress <- renderText({
+        "Work in progress"
+      })
+      
       data <- runBCFToolsROH(output, input, input$file)
+      
+      output$progress <- renderText({
+        "Done"
+      })
     }
     
   })
