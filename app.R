@@ -31,6 +31,11 @@ ui <- fluidPage(
       textInput("chromosome", "Chromosome number", ""),
       textInput("begin", "Begin", ""),
       textInput("end", "End", ""),
+      tags$hr(),
+      textInput("afDefault", "AF Default", ""),
+      textInput("plValue", "PL value", ""),
+      textInput("recRate", "Recombination rate", ""),
+      tags$hr(),
       actionButton('run','Run algorithm')
       
     ),
@@ -51,8 +56,23 @@ getObject <- function(input) {
   task
 }
 
-
 runBCFToolsROH <- function(output, input, fileName) {
+  af.default = 0.4
+  pl.value = 30.0
+  rec.rate = NULL
+  
+  
+  if (input$afDefault > 0) {
+    af.default <- input$afDefault
+  }
+  if (input$plValue > 0) {
+    pl.value <- input$plValue
+  }
+  if (input$recRate > 0) {
+    rec.rate <- input$recRate
+  }
+  
+  
   task <- getObject(input) 
   task$vcf_file_name <- fileName
   print(task)
@@ -62,7 +82,7 @@ runBCFToolsROH <- function(output, input, fileName) {
   subsetter.prepare.result <- subsetter.prepare(task)
 
     print("== BCFTools ROH ==")
-    bcftools.roh.params <- bcftools.roh.buildparams(subsetter.prepare.result)
+    bcftools.roh.params <- bcftools.roh.buildparams(subsetter.prepare.result, af.default, pl.value,	ignore.homref = FALSE, skip.indels = FALSE, rec.rate)
     bcftools.roh.output <- bcftools.roh.run(bcftools.roh.params)
     
     print("== Plink ROH ==")
