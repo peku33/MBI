@@ -1,3 +1,6 @@
+if (! "RUnit" %in% row.names(installed.packages()))
+  install.packages("RUnit")
+  
 library('RUnit')
 
 source('bcftools.R')

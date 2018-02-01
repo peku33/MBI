@@ -1,6 +1,6 @@
 source('roh.R')
 
-bcftools.executable <- "./BCFtools/bcftools"
+bcftools.executable <- "/Users/Pro/BCFtools/bcftools"
 
 # Buduje wiersz polecenia do uruchomienia BCFTools ROH
 #
@@ -102,7 +102,7 @@ bcftools.roh.run <- function(
 	# Uruchomienie bcftools
 	exit.code <- system2(
 		bcftools.executable, params,
-		"", "", # stdout + stderr do konsoli
+		"", "" # stdout + stderr do konsoli
 		# NULL, NULL, # stdout + stderr do kosza
 	)
 
@@ -180,8 +180,8 @@ bcftools.view.run <- function(params) {
 	# Uruchomienie bcftools
 	exit.code <- system2(
 		bcftools.executable, params,
-		# "", "", # stdout + stderr do konsoli
-		NULL, NULL, # stdout + stderr do kosza
+		 "", "" # stdout + stderr do konsoli
+		#NULL, NULL, # stdout + stderr do kosza
 	)
 
 	# Sprawdzamy kod zakończenia
