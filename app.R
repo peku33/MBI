@@ -58,7 +58,7 @@ runPlink <- function(output, input, subsetter.prepare.result) {
 
 runBCFToolsROH <- function(output, input, subsetter.prepare.result) {
   # BFCTools params
-  af.default = 0.4
+  af.default = NULL
   pl.value = 30.0
   rec.rate = NULL
   

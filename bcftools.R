@@ -19,7 +19,7 @@ bcftools.executable <- "/Users/Pro/BCFtools/bcftools"
 #	viterbi.training	-V, --viterbi-training <float>		estimate HMM parameters, <float> is the convergence threshold, e.g. 1e-10 (experimental)
 bcftools.roh.buildparams <- function(
 	vcf.file.name,
-	af.default = 0.4, pl.value = 30.0,
+	af.default = NULL, pl.value = 30.0,
 	ignore.homref = FALSE, skip.indels = FALSE,
 	rec.rate = NULL,
 
