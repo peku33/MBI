@@ -98,6 +98,11 @@ Przykład uruchomienia algorytmów:
 ---------------------------------
 `roh-example.R`
 
+Rezultaty testów aplikacji oraz badań
+---------------------------------
+Dostępne na [wiki](https://github.com/peku33/MBI/wiki) 
+
+
 Testy:
 ------
 Testowalne metody zostały pokryte testami jednostkowymi. Aby uruchomić kompletny zestaw testów należy rozpocząć działanie programu `tests-runit.R`
