@@ -25,17 +25,27 @@ ui <- fluidPage(
   #    ),
       
       textInput("file", "File path", ""),
-      tags$hr(),
+      hr(),
       
-      textInput("sample", "Sample", ""),
-      textInput("chromosome", "Chromosome number", ""),
-      textInput("begin", "Begin", ""),
-      textInput("end", "End", ""),
-      tags$hr(),
-      textInput("afDefault", "AF Default", ""),
-      textInput("plValue", "PL value", ""),
+      textInput("sample", "Sample", NULL),
+      textInput("chromosome", "Chromosome number", NULL),
+      textInput("begin", "Begin", NULL),
+      textInput("end", "End", NULL),
+      hr(),
+      helpText("BCFTools ROH params:"),
+      textInput("afDefault", "AF Default", 0.4),
+      textInput("plValue", "PL value", 30.0),
       textInput("recRate", "Recombination rate", ""),
-      tags$hr(),
+      checkboxInput("ignoreHomref", "Skip hom-ref genotypes (0/0)", FALSE),
+      checkboxInput("skipIndels", "Skip indels as their genotypes are enriched for errors", FALSE),
+      textInput("hwToAz", "Transition probability from HW (Hardy-Weinberg) to AZ (autozygous)", NULL),
+      textInput("azToHw", "Transition probability from AZ to HW state", NULL),
+      textInput("viterbiTraining", "Estimate HMM parameters, <float> is the convergence threshold, e.g. 1e-10 (experimental)", NULL),
+      hr(),
+      helpText("PLINK ROH params:"),
+      textInput("minSNPCount", "min SNP count"),
+      textInput("minLength", "min length"),
+      hr(),
       actionButton('run','Run algorithm'),
       verbatimTextOutput("progress")
       
@@ -47,8 +57,10 @@ ui <- fluidPage(
 
 getObject <- function(input) {
   task <- list()
-  task$sample <- input$sample
-  
+  if (!is.null(input$sample) && input$sample != "") {
+    task$sample <- input$sample
+  }
+
   task$chromosomes <- list()
   task$chromosomes$chromosome <-input$chromosome
   task$chromosomes$region <- list()
@@ -58,11 +70,16 @@ getObject <- function(input) {
 }
 
 runBCFToolsROH <- function(output, input, fileName) {
+  # BFCTools params
   af.default = 0.4
   pl.value = 30.0
   rec.rate = NULL
   
-  
+  ignore.homref = input$ignoreHomref
+  skip.indels = input$skipIndels
+  hw.to.az <- input$hwToAz
+  az.to.hw <- input$azToHw
+  viterbi.training<- input$viterbiTraining
   if (input$afDefault > 0) {
     af.default <- input$afDefault
   }
@@ -73,6 +90,15 @@ runBCFToolsROH <- function(output, input, fileName) {
     rec.rate <- input$recRate
   }
   
+  # Plink params
+  snp <- NULL
+  if (input$minSNPCount > 0) {
+    snp <- input$minSNPCount
+  }
+  kb <- NULL
+  if (input$minLength > 0) {
+    kb <- input$minLength
+  }
   
   task <- getObject(input) 
   task$vcf_file_name <- fileName
@@ -83,11 +109,11 @@ runBCFToolsROH <- function(output, input, fileName) {
   subsetter.prepare.result <- subsetter.prepare(task)
 
     print("== BCFTools ROH ==")
-    bcftools.roh.params <- bcftools.roh.buildparams(subsetter.prepare.result, af.default, pl.value,	ignore.homref = FALSE, skip.indels = FALSE, rec.rate)
+    bcftools.roh.params <- bcftools.roh.buildparams(subsetter.prepare.result, af.default, pl.value,	ignore.homref, skip.indels, rec.rate)
     bcftools.roh.output <- bcftools.roh.run(bcftools.roh.params)
     
     print("== Plink ROH ==")
-    plink.roh.params <- plink.roh.buildparams(subsetter.prepare.result)
+    plink.roh.params <- plink.roh.buildparams(subsetter.prepare.result, snp, kb)
     print(plink.roh.params)
     plink.roh.output <- plink.roh.run(plink.roh.params)
     
@@ -98,18 +124,18 @@ runBCFToolsROH <- function(output, input, fileName) {
     output$results2 <- renderPlot({
     #  input$newplot
      # plot(plink.roh.output) # mock data
-      plot(bcftools.roh.output$homozygosity,col="red",cex=0.25)
+      plot(bcftools.roh.output$position, bcftools.roh.output$homozygosity,col="red",cex=0.25)
       
     })
     
     output$results1 <- renderPlot({
       #input$newplot
-      plot(plink.roh.output$homozygosity,col="green",cex=0.25) # mock data
+      plot(plink.roh.output$position, plink.roh.output$homozygosity,col="green",cex=0.25) # mock data
     })
     
     output$results <- renderPlot({
-    #  input$newplot
-      plot(vcfr.baf.output,col="blue",cex=0.25)
+    #  input$newplotx="position"
+      plot(vcfr.baf.output$position,vcfr.baf.output$baf,col="blue",cex=0.25)
     })
 }
 
